@@ -20,13 +20,13 @@ services:
       - MINIO_ROOT_PASSWORD=${ROOT_PASS}
     labels:
       - traefik.enable=true
-      # routers
-      - traefik.http.routers.storage.tls=true
-      - traefik.http.routers.storage.tls.certresolver=letsencrypt
-      - traefik.http.routers.storage.entrypoints=websecure
-      - traefik.http.routers.storage.rule=Host(`${DOMAIN}`)
+      - traefik.docker.network=traefik
       # services
       - traefik.http.services.storage.loadbalancer.server.port=9000
+      # routers
+      - traefik.http.routers.storage.entrypoints=websecure
+      - traefik.http.routers.storage.rule=Host(`minio.${DOMAIN}`)
+      - traefik.http.routers.storage.tls.certresolver=${CERT_RESOLVER}
 
 networks:
   traefik:
